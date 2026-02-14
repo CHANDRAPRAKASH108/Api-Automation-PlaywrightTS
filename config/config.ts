@@ -13,10 +13,10 @@ export const config = {
         apiBaseUrl: requireEnv('API-BASE-URL')
     },
     dbConfig: {
-        dbHost: requireEnv('DB-HOST'),
-        dbName: requireEnv('DB-NAME'),
-        dbUser: requireEnv('DB-USER'),
-        dbPass: requireEnv('DB-PASS')
+        dbHost: requireEnv('DB_HOST'),
+        dbName: requireEnv('DB_NAME'),
+        dbUser: requireEnv('DB_USER'),
+        dbPass: requireEnv('DB_PASS')
     }
 }
 
