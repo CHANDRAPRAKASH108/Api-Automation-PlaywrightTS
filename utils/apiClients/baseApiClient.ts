@@ -11,8 +11,8 @@ export async function apiClient(request: APIRequestContext,
     queryParam?: Record<string, string>,
     requestBody?: unknown
 ): Promise<APIResponse> {
-    console.log(`api client ${config.apiConfig.apiBaseUrl}`)
-    const response = await request[method](config.apiConfig.apiBaseUrl + endpoint, {
+    const fullUrl = config.apiConfig.apiBaseUrl + endpoint;
+    const response = await request[method](fullUrl, {
         headers: {
             ... await getDefaultHeaders(authToken),
             ...additionalHeaders
@@ -20,7 +20,13 @@ export async function apiClient(request: APIRequestContext,
         params: queryParam,
         data: requestBody
     });
-    console.log(`Logging API Response ${endpoint}`);
-    console.log(await response.json());
+    console.log(
+        `API Request for ${fullUrl}`,
+        `Method: ${method}`,
+        `Param: ${queryParam}`,
+        `Payload: ${requestBody}`,
+        `Header: ${additionalHeaders}`
+    )
+    console.log(`Logging API Response ${fullUrl}`);
     return response;
 }

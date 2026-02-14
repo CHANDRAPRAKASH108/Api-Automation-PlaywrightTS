@@ -5,7 +5,6 @@ function requireEnv(key: string){
     if(!value){
         throw new Error(`Value not found in .env for key: ${key}`)
     }else{
-        console.log(`Base Url - ${value}`)
         return value;
     }
 }
@@ -13,6 +12,12 @@ function requireEnv(key: string){
 export const config = {
     apiConfig: {
         apiBaseUrl: requireEnv('API-BASE-URL')
+    },
+    dbConfig: {
+        dbHost: requireEnv('DB-HOST'),
+        dbName: requireEnv('DB-NAME'),
+        dbUser: requireEnv('DB-USER'),
+        dbPass: requireEnv('DB-PASS')
     }
 }
 
