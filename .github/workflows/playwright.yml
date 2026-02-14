@@ -4,24 +4,66 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
+# IMPORTANT: Permissions required for Workload Identity Federation
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
+    # 1. Authenticate to Google Cloud
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        # Update this with your Provider path (see below)
+        workload_identity_provider: 'projects/239205239513/locations/global/workloadIdentityPools/github-pool/providers/github-pool'
+        # Update this with your Service Account email
+        service_account: 'github-actions-secrets@project-648b01eb-bc18-4387-abd.iam.gserviceaccount.com'
+
+    # 2. Fetch Secrets from Secret Manager
+    - id: 'secrets'
+      uses: 'google-github-actions/get-secretmanager-secrets@v2'
+      with:
+        secrets: |-
+          DB_HOST_VAL:239205239513/DB_HOST
+          DB_NAME_VAL:239205239513/DB-NAME
+          DB_USER_VAL:239205239513/DB_USER
+          DB_PASS_VAL:239205239513/DB_PASS
+
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+
     - name: Install dependencies
       run: npm ci
+
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+
     - name: Run Playwright tests
+      # Mapping the secrets to the environment variables your code expects
+      env:
+        DB_HOST: ${{ steps.secrets.outputs.DB_HOST_VAL }}
+        DB_NAME: ${{ steps.secrets.outputs.DB_NAME_VAL }}
+        DB_USER: ${{ steps.secrets.outputs.DB_USER_VAL }}
+        DB_PASS: ${{ steps.secrets.outputs.DB_PASS_VAL }}
       run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+
+    - name: Generate Allure Report
+      if: always()
+      run: |
+        npx allure generate allure-results --clean -o allure-report
+
+    - name: Upload Allure Report
+      uses: actions/upload-artifact@v4
+      if: always()
       with:
-        name: playwright-report
-        path: playwright-report/
+        name: allure-report
+        path: allure-report/
         retention-days: 30
