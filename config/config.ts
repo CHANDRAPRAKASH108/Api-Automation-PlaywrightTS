@@ -1,12 +1,11 @@
 require('dotenv').config({ path: '.env' })
 
-function requireEnv(key: string){
-    const value = process.env[key]
-    if(!value){
-        throw new Error(`Value not found in .env for key: ${key}`)
-    }else{
-        return value;
+function requireEnv(key: string) {
+    const value = process.env[key]; 
+    if (!value) {
+        throw new Error(`Value not found for key: ${key}`);
     }
+    return value;
 }
 
 export const config = {
