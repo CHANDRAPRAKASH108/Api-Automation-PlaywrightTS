@@ -34,7 +34,7 @@ jobs:
           DB_HOST_VAL:239205239513/DB_HOST
           DB_NAME_VAL:239205239513/DB-NAME
           DB_USER_VAL:239205239513/DB_USER
-          DB_PASS_VAL:239205239513/DB_PASS
+          DB_PASS_VAL:239205239513/DB-PASS
 
     - uses: actions/setup-node@v4
       with:
