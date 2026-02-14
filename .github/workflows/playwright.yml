@@ -22,7 +22,7 @@ jobs:
       uses: 'google-github-actions/auth@v2'
       with:
         # Update this with your Provider path (see below)
-        workload_identity_provider: 'projects/239205239513/locations/global/workloadIdentityPools/github-pool/providers/github-pool'
+        workload_identity_provider: 'projects/239205239513/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
         # Update this with your Service Account email
         service_account: 'github-actions-secrets@project-648b01eb-bc18-4387-abd.iam.gserviceaccount.com'
 
